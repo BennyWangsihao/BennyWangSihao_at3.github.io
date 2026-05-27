@@ -1,0 +1,247 @@
+/* 
+  Echo Bloom - CSS Design Notes
+
+  This prototype uses Click as the chosen browser action. The context is a relaxing
+  soundscape tool, so the visual design is intentionally soft, slow and minimal.
+  I avoided bright warning colours, sharp rectangles and fast movement because those
+  choices would not match the calm mood of the project. The circular "seed" buttons
+  are designed to suggest small sound objects that can bloom when clicked.
+
+  The interface is not meant to feel like a normal music player with complicated
+  controls. Instead, it behaves more like a small experimental sound garden. This
+  supports the assignment brief because the focus is on one fundamental interaction,
+  not a complete website. Every visual state is connected to the click action:
+  inactive seeds are dim and quiet, while active seeds glow, scale slightly and
+  display a stronger visual presence.
+
+  I use CSS transitions to make the feedback feel gentle. The slow background change
+  and the glowing seed effect give the user confirmation that their click has changed
+  the system. This is important for usability because sound interaction can sometimes
+  feel invisible. By combining audio feedback, visual feedback and text feedback,
+  the user can understand what is currently active even if their volume is low.
+
+  The layout is responsive. On a larger screen, the seeds are arranged in a row-like
+  flexible grid. On a smaller screen, they wrap naturally so the prototype can still
+  work on mobile browsers. I chose Click instead of Hover partly because hover is less
+  reliable on touch devices. This makes the prototype more accessible and practical.
+
+  No external CSS libraries are used. This keeps the code original and suitable for
+  the academic requirement. The design uses only gradients, shadows, borders and
+  transitions written in this file.
+*/
+
+:root {
+  --bg-one: #101624;
+  --bg-two: #1d2b3a;
+  --text-main: #f4f1e8;
+  --text-soft: #c7c3b8;
+  --panel: rgba(255, 255, 255, 0.08);
+  --panel-border: rgba(255, 255, 255, 0.16);
+  --glow: rgba(185, 220, 255, 0.8);
+  --active: #d8f3ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at top left, rgba(136, 184, 209, 0.25), transparent 35%),
+    linear-gradient(135deg, var(--bg-one), var(--bg-two));
+  transition: background 0.8s ease;
+}
+
+body.sound-active {
+  background:
+    radial-gradient(circle at top left, rgba(194, 225, 255, 0.35), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(178, 146, 255, 0.2), transparent 35%),
+    linear-gradient(135deg, #142033, #293b4d);
+}
+
+.page {
+  width: min(1100px, 92%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 64px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 42px;
+}
+
+.intro {
+  max-width: 720px;
+}
+
+.label {
+  margin-bottom: 14px;
+  color: var(--text-soft);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+h1 {
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 0.95;
+  margin-bottom: 22px;
+  font-weight: 700;
+}
+
+.description {
+  max-width: 580px;
+  color: var(--text-soft);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.sound-board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+}
+
+.seed {
+  width: 150px;
+  height: 180px;
+  border: 1px solid var(--panel-border);
+  border-radius: 90px;
+  background: var(--panel);
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.seed:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.seed:focus-visible {
+  outline: 3px solid var(--active);
+  outline-offset: 5px;
+}
+
+.seed-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, #ffffff, #9fc4d8 35%, #38516b 75%);
+  opacity: 0.65;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.seed-name {
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+
+.seed.active {
+  background: rgba(216, 243, 255, 0.16);
+  border-color: rgba(216, 243, 255, 0.75);
+  box-shadow: 0 0 35px rgba(185, 220, 255, 0.25);
+  transform: translateY(-8px) scale(1.03);
+}
+
+.seed.active .seed-circle {
+  opacity: 1;
+  transform: scale(1.2);
+  box-shadow:
+    0 0 25px var(--glow),
+    0 0 60px rgba(185, 220, 255, 0.35);
+}
+
+.seed.active .seed-name {
+  color: var(--active);
+}
+
+.status-panel {
+  max-width: 720px;
+  padding: 26px;
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  background: var(--panel);
+  backdrop-filter: blur(14px);
+}
+
+.status-title {
+  margin-bottom: 10px;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+#statusText {
+  margin-bottom: 22px;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.reset-button {
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 12px 20px;
+  background: transparent;
+  color: var(--text-main);
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.reset-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.38);
+  transform: translateY(-2px);
+}
+
+.reflection {
+  max-width: 760px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+.reflection h2 {
+  margin-bottom: 12px;
+  color: var(--text-main);
+  font-size: 1.4rem;
+}
+
+@media (max-width: 700px) {
+  .page {
+    padding: 42px 0;
+  }
+
+  .sound-board {
+    justify-content: center;
+  }
+
+  .seed {
+    width: 130px;
+    height: 160px;
+  }
+
+  .status-panel,
+  .reflection {
+    text-align: center;
+  }
+}
