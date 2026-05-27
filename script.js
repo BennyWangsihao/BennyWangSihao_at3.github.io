@@ -1,58 +1,58 @@
 /*
   This script controls the click interaction.
-  Each button turns one generated sound on or off.
-  The Web Audio API is used instead of downloaded audio files,
-  which avoids copyright issues and keeps the prototype simple.
+  Each image button turns one generated sound on or off.
+  The Web Audio API creates simple tones, so no external audio files are needed.
 */
 
 const buttons = document.querySelectorAll(".seed");
 const statusText = document.querySelector("#status");
 const resetButton = document.querySelector("#reset");
 
-let audio;
-let sounds = {};
+let audioContext;
+let activeSounds = {};
 
 function startAudio() {
-  if (!audio) {
-    audio = new (window.AudioContext || window.webkitAudioContext)();
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
   }
 }
 
-function makeTone(freq) {
-  const osc = audio.createOscillator();
-  const gain = audio.createGain();
+function makeTone(frequency) {
+  const oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
 
-  osc.frequency.value = freq;
-  osc.type = "sine";
+  oscillator.type = "sine";
+  oscillator.frequency.value = frequency;
   gain.gain.value = 0.04;
 
-  osc.connect(gain);
-  gain.connect(audio.destination);
-  osc.start();
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+
+  oscillator.start();
 
   return {
     stop() {
-      osc.stop();
+      oscillator.stop();
     }
   };
 }
 
-function getFrequency(name) {
-  if (name === "rain") return 180;
-  if (name === "wind") return 240;
-  if (name === "tone") return 110;
-  if (name === "pulse") return 330;
-  if (name === "night") return 90;
+function getFrequency(soundName) {
+  if (soundName === "rain") return 180;
+  if (soundName === "wind") return 240;
+  if (soundName === "tone") return 110;
+  if (soundName === "pulse") return 330;
+  if (soundName === "night") return 90;
 }
 
 function updateStatus() {
-  const active = Object.keys(sounds);
+  const activeNames = Object.keys(activeSounds);
 
-  if (active.length === 0) {
+  if (activeNames.length === 0) {
     statusText.textContent = "No sound layers active.";
     document.body.classList.remove("active");
   } else {
-    statusText.textContent = "Active layers: " + active.join(", ");
+    statusText.textContent = "Active layers: " + activeNames.join(", ");
     document.body.classList.add("active");
   }
 }
@@ -63,12 +63,12 @@ buttons.forEach((button) => {
 
     const soundName = button.dataset.sound;
 
-    if (sounds[soundName]) {
-      sounds[soundName].stop();
-      delete sounds[soundName];
+    if (activeSounds[soundName]) {
+      activeSounds[soundName].stop();
+      delete activeSounds[soundName];
       button.classList.remove("on");
     } else {
-      sounds[soundName] = makeTone(getFrequency(soundName));
+      activeSounds[soundName] = makeTone(getFrequency(soundName));
       button.classList.add("on");
     }
 
@@ -77,11 +77,11 @@ buttons.forEach((button) => {
 });
 
 resetButton.addEventListener("click", () => {
-  Object.keys(sounds).forEach((name) => {
-    sounds[name].stop();
+  Object.keys(activeSounds).forEach((soundName) => {
+    activeSounds[soundName].stop();
   });
 
-  sounds = {};
+  activeSounds = {};
 
   buttons.forEach((button) => {
     button.classList.remove("on");
