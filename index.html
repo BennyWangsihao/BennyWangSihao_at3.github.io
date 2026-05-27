@@ -3,80 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Echo Bloom</title>
-
-  <!-- 
-    reset.css is the only external stylesheet allowed by the assignment brief.
-    It helps remove default browser spacing and makes the layout more consistent
-    across different browsers. The rest of the styling is written by me in style.css.
-  -->
-  <link rel="stylesheet" href="reset.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <main class="page">
+  <main>
     <section class="intro">
-      <p class="label">Click Interaction Prototype</p>
-
       <h1>Echo Bloom</h1>
-
-      <p class="description">
-        Click each sound seed to build a calm browser-based soundscape.
-        Each seed adds or removes one gentle audio layer.
+      <p>
+        A click-based sound prototype. Click each image to turn a calm sound layer on or off.
       </p>
     </section>
 
-    <section class="sound-board" aria-label="Interactive sound seeds">
-      <!-- 
-        Each button represents one sound layer. I use real buttons instead of divs
-        because buttons are easier to understand for browsers, keyboards and screen readers.
-        The data-sound value is used by JavaScript to decide which sound layer to control.
-      -->
+    <section class="sound-board">
       <button class="seed" data-sound="rain">
-        <span class="seed-circle"></span>
-        <span class="seed-name">Rain</span>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rain_on_window.jpg" alt="Rain" />
+        <span>Rain</span>
       </button>
 
       <button class="seed" data-sound="wind">
-        <span class="seed-circle"></span>
-        <span class="seed-name">Wind</span>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Wind_turbine_Holderness.jpg" alt="Wind" />
+        <span>Wind</span>
       </button>
 
       <button class="seed" data-sound="tone">
-        <span class="seed-circle"></span>
-        <span class="seed-name">Deep Tone</span>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/FullMoon2010.jpg" alt="Moon" />
+        <span>Deep Tone</span>
       </button>
 
       <button class="seed" data-sound="pulse">
-        <span class="seed-circle"></span>
-        <span class="seed-name">Soft Pulse</span>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rain_drops_(Unsplash).jpg" alt="Drops" />
+        <span>Pulse</span>
       </button>
 
       <button class="seed" data-sound="night">
-        <span class="seed-circle"></span>
-        <span class="seed-name">Night</span>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Night_sky.jpg" alt="Night Sky" />
+        <span>Night</span>
       </button>
     </section>
 
-    <section class="status-panel">
-      <p class="status-title">Current Soundscape</p>
-      <p id="statusText">No sound layers active yet.</p>
-
-      <button id="resetButton" class="reset-button">
-        Reset Soundscape
-      </button>
+    <section class="panel">
+      <p id="status">No sound layers active.</p>
+      <button id="reset">Reset</button>
     </section>
 
-    <section class="reflection">
-      <h2>Prototype Concept</h2>
-
+    <section class="notes">
+      <h2>Concept</h2>
       <p>
-        Echo Bloom is a click-based interaction prototype designed for a relaxation
-        and focused study context. The user does not navigate through a full website.
-        Instead, the main experience is one repeated interaction: clicking sound seeds
-        to activate and deactivate different layers of a calm soundscape.
+        Echo Bloom uses click as the main browser interaction. The user clicks image-based
+        sound seeds to build a relaxing soundscape. Each click gives visual feedback,
+        sound feedback and text feedback.
+      </p>
+
+      <h2>Image Sources</h2>
+      <p>
+        Images are linked from Wikimedia Commons: Rain on window, Wind turbine Holderness,
+        FullMoon2010, Rain drops, and Night sky.
       </p>
     </section>
   </main>
